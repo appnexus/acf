@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/appnexus/acf.svg?branch=master)](https://travis-ci.org/appnexus/acf)
+
 AppNexus Common Framework (ACF)
 ===============================
 

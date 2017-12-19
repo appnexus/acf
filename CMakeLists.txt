@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.0)
 project(acf C CXX ASM)
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+
 option(DISABLE_TESTS "If tests should be compiled or not" OFF)
 
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
-option(SANITIZE "Enable Clang sanitizers for nvim binary" OFF)
+option(SANITIZE "Enable Clang sanitizers" OFF)
 if(SANITIZE AND NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
     message(WARNING "SANITIZE is only supported for Clang ... disabling")
     set(SANITIZE OFF)
@@ -55,23 +55,7 @@ set(CMAKE_MACOSX_RPATH 1)
 
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
-if(NOT ${SANITIZE})
-	set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-endif()
-
-execute_process(COMMAND ${CMAKE_C_COMPILER} -fuse-ld=gold -Wl,--version ERROR_QUIET OUTPUT_VARIABLE LD_VERSION)
-    if ("${LD_VERSION}" MATCHES "GNU gold")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold -Wl,--icf=all -Wl,--disable-new-dtags")
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold -Wl,--icf=all -Wl,--disable-new-dtags")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections")
-    else ()
-        message(WARNING "GNU gold linker isn't available, using the default system linker.")
-endif()
-
-if (NOT DISABLE_TESTS)
-	find_package(Check REQUIRED)
-endif()
+find_package(Threads REQUIRED)
 
 include_directories(${SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -128,14 +112,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/acf.pc.in
 install(FILES ${PROJECT_BINARY_DIR}/acf.pc
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/${INSTALL_LIB_DIR}/pkgconfig")
 
-enable_testing()
-include_directories(${CHECK_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR})
-include(CheckTest)
-
-set(CHECK_LIBS -pthread)
-
-CHECK_TEST(check_an_array LIBS ${CHECK_LIBS} SRC ${SRC} ${PROJECT_SOURCE_DIR}/test/check_an_array.c)
-CHECK_TEST(check_charset LIBS ${CHECK_LIBS} SRC ${SRC} ${PROJECT_SOURCE_DIR}/test/check_charset.c)
-CHECK_TEST(check_bitmap LIBS ${CHECK_LIBS} SRC ${SRC} ${PROJECT_SOURCE_DIR}/test/check_bitmap.c)
-CHECK_TEST(check_an_array_cpp LIBS ${CHECK_LIBS} SRC ${SRC} ${PROJECT_SOURCE_DIR}/test/check_an_array_cpp.cc)
+if (NOT ${DISABLE_TESTS})
+	enable_testing()
+	add_subdirectory(test)
+endif()

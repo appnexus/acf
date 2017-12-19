@@ -1,0 +1,12 @@
+Source: acf
+Maintainer: Mobai Zhang <mzhang@appnexus.com>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends:  debhelper (>= 9)
+
+Package: acf
+Architecture: any
+Depends: ${shlibs:Depends},
+    ${misc:Depends}
+Description: AppNexus Realtime Platform's common C library

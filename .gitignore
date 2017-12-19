@@ -1,0 +1,10 @@
+build
+core
+core.*
+vgcore.*
+ctags
+*~
+*#
+*.swp
+*.swo
+*.swn

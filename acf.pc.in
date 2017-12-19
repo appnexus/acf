@@ -1,0 +1,9 @@
+prefix=${CMAKE_INSTALL_PREFIX}
+includedir=${CMAKE_INSTALL_PREFIX}/include
+libdir=${CMAKE_INSTALL_PREFIX}/${INSTALL_LIB_DIR}
+
+Name: acf
+Description: AppNexus Common Framework Library
+Version: ${CMAKE_ACF_VERSION}
+Libs: -L${CMAKE_INSTALL_PREFIX}/${INSTALL_LIB_DIR} -lacf
+Cflags: -I${CMAKE_INSTALL_PREFIX}/include

@@ -1,0 +1,27 @@
+Files: *
+Copyright: 2015 AppNexus, Inc <www.appnexus.com>
+License: Apache-2.0
+
+Files: common/an_qsort.inc
+Copyright: 1992-2015 The FreeBSD Project, modifications by AppNexus, Inc.
+License: BSD-2-clause
+
+Files: common/an_table_hash.h
+Copyright: Public Domain, Austin Appleby
+License: public-domain
+
+Files: common/net/protocol/http-parser/*
+Copyright: 2009 NGINX, Joyent, Inc. and other Node contributors.
+License: Expat
+
+Files: common/x86_64/cpuid.*
+Copyright: 2009-2011 Samy Al Bahra, modifications by AppNexus, Inc.
+License: BSD-2-clause
+
+Files: cmake/FindCheck.cmake
+Copyright: 2007 Daniel Gollub <gollub@b1-systems.de>, 2007-2009 Bjoern Ricks <bjoern.ricks@gmail.com>
+License: BSD-3-clause
+
+Files: include/an_charset.*
+Copyright: 2011 Joseph A. Adams <joeyadams3.14159@gmail.com>
+License: Expat

@@ -115,5 +115,8 @@ install(FILES ${PROJECT_BINARY_DIR}/acf.pc
 
 if (NOT ${DISABLE_TESTS})
 	enable_testing()
+	find_package(codecov)
+	add_coverage(acf)
 	add_subdirectory(test)
+	coverage_evaluate()
 endif()

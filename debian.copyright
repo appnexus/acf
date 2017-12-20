@@ -25,3 +25,7 @@ License: BSD-3-clause
 Files: include/an_charset.*
 Copyright: 2011 Joseph A. Adams <joeyadams3.14159@gmail.com>
 License: Expat
+
+Files: cmake/Findcodecov.cmake, cmake/FindGcov.cmake, cmake/FindLcov.cmake, cmake/llvm-cov-wrapper
+Copyright: 2015-2017 RWTH Aachen University, Federal Republic of Germany
+License: BSD-3-clause

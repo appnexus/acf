@@ -229,3 +229,8 @@ https://github.com/rustyrussell/ccan/blob/master/ccan/array_size/array_size.h
 and
 https://github.com/rustyrussell/ccan/blob/master/ccan/build_assert/build_assert.h.
 That code is available under the Creative Commons CC0 license.
+
+Files: cmake/Findcodecov.cmake, cmake/FindGcov.cmake, cmake/FindLcov.cmake, cmake/llvm-cov-wrapper
+Copyright: 2015-2017 RWTH Aachen University, Federal Republic of Germany
+License: BSD-3-clause
+See: https://github.com/RWTH-HPC/CMake-codecov

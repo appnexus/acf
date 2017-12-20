@@ -5,15 +5,31 @@ dist: trusty
 sudo: required
 group: edge
 
-before_script:
+
+script:
   - mkdir build
   - cd build
-  - cmake ..
-
-script: make && make test
+  - cmake .. ${CMAKE_OPTIONS}
+  - make
+  - make test
 
 matrix:
   include:
+
+  - os: linux
+    compiler: gcc
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['check', 'g++-4.9']
+    before_script:
+      - pip install --user cpp-coveralls
+    after_success:
+      - make coverage
+      - coveralls --build-root test --include src --gcov 'gcov-4.9' --gcov-options '\-lp'
+    env:
+      - COMPILER=g++-4.9
+      - CMAKE_OPTIONS=-DENABLE_COVERAGE=ON
 
   # Linux / GCC
   - os: linux

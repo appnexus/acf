@@ -119,4 +119,7 @@ if (NOT ${DISABLE_TESTS})
 	add_coverage(acf)
 	add_subdirectory(test)
 	coverage_evaluate()
+    add_custom_target(coverage
+        make && make test && make gcov && make lcov
+    )
 endif()

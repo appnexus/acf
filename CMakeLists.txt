@@ -65,6 +65,7 @@ list(APPEND SRC
 	${SOURCE_DIR}/an_allocator.c
 	${SOURCE_DIR}/an_array.c
 	${SOURCE_DIR}/an_charset.c
+	${SOURCE_DIR}/an_itoa.c
 	${SOURCE_DIR}/an_syslog.c
 	${SOURCE_DIR}/an_util.c
 )

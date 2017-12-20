@@ -1,10 +1,6 @@
-#include <inttypes.h>
-#include <string.h>
-#include <strings.h>
+#include "an_itoa.h"
 
-#include "common/an_cc.h"
-#include "common/an_itoa.h"
-#include "common/util.h"
+#include <string.h>
 
 /*
  * We only use functions for clarity here.  Eyeballing -S output

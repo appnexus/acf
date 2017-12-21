@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/appnexus/acf.svg?branch=master)](https://travis-ci.org/appnexus/acf)
+[![Coverage Status](https://coveralls.io/repos/github/appnexus/acf/badge.svg?branch=master)](https://coveralls.io/github/appnexus/acf?branch=master)
 
 AppNexus Common Framework (ACF)
 ===============================

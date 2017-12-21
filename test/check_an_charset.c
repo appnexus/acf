@@ -50,17 +50,41 @@ START_TEST(test_stats)
 }
 END_TEST
 
+START_TEST(utf8_validate)
+{
+#define _UTF8_VALIDATE(s, r) ck_assert(an_utf8_validate(s, strlen(s)) == (r))
+
+	_UTF8_VALIDATE("abc", true);
+	_UTF8_VALIDATE("\u0430\u0410", true);
+	_UTF8_VALIDATE("\u0430\u0410abc", true);
+
+	_UTF8_VALIDATE("\xc3\x28", false);
+	_UTF8_VALIDATE("\xa0\xa1", false);
+
+	_UTF8_VALIDATE("\xe2\x28\xa1", false);
+	_UTF8_VALIDATE("\xe2\x82\x28", false);
+
+	_UTF8_VALIDATE("\xf0\x28\x8c\xbc", false);
+	_UTF8_VALIDATE("\xf0\x90\x28\xbc", false);
+	_UTF8_VALIDATE("\xf0\x28\x8c\x28", false);
+
+#undef _UTF8_VALIDATE
+}
+END_TEST
+
+
 int
 main(int argc, char** argv)
 {
-	Suite* suite = suite_create("common/check_charset");
+	Suite *suite = suite_create("check_an_charset");
 
-	TCase* tc = tcase_create("test_charset");
+	TCase *tc = tcase_create("test_an_charset");
 	tcase_add_test(tc, test_stats);
+	tcase_add_test(tc, utf8_validate);
 	suite_add_tcase(suite, tc);
 
 	SRunner *sr = srunner_create(suite);
-	srunner_set_xml(sr, "check/check_charset");
+	srunner_set_xml(sr, "check/check_an_charset");
 	srunner_set_fork_status(sr, CK_FORK);
 	srunner_run_all(sr, CK_NORMAL);
 	int num_failed = srunner_ntests_failed(sr);

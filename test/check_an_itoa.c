@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
+#include <sys/types.h>
 
 #include "an_itoa.h"
 
@@ -24,6 +25,8 @@ test_itoa(uint32_t x)
 	assert(buf[1] != 'X');
 	assert(buf[1] != ' ');
 	assert(*(end - 1) != 'X');
+	assert('0' <= *(end - 1));
+	assert(*(end - 1) <= '9');
 	while (*end == '\0') end++;
 	assert(*end == 'X');
 	assert(end - (buf + 1) <= 10);
@@ -47,6 +50,8 @@ test_ltoa(uint64_t x)
 	assert(buf[1] != 'X');
 	assert(buf[1] != ' ');
 	assert(*(end - 1) != 'X');
+	assert('0' <= *(end - 1));
+	assert(*(end - 1) <= '9');
 	while (*end == '\0') end++;
 	assert(end - (buf + 1) <= 20);
 	assert(*end == 'X');
@@ -60,6 +65,12 @@ int
 main(int argc, char **argv)
 {
 	uint64_t hi;
+	ssize_t range = 128;
+
+	/* Fewer test by default. */
+	if (argc > 1) {
+		range = 1024 * 1024;
+	}
 
 #define TEST(I) do {				\
 		uint64_t test_value = (I);	\
@@ -68,11 +79,24 @@ main(int argc, char **argv)
 		test_ltoa(test_value);		\
 	} while (0)
 
+	{
+		char buf[23];
+		char *end;
+
+		end = an_itoa(buf, 0);
+		assert(end == &buf[1]);
+		assert(buf[0] == '0');
+
+		end = an_ltoa(buf, 0);
+		assert(end == &buf[1]);
+		assert(buf[0] == '0');
+	}
+
 	/* Test around powers of 10. */
 	hi = 1;
 	for (size_t i = 0; i <= 20; i++, hi *= 10) {
 		printf("Testing around power of 10: %"PRIu64"\n", hi);
-		for (long j = -1024 * 1024; j <= 1024 * 1024; j++) {
+		for (ssize_t j = -range; j <= range; j++) {
 			TEST(hi + j);
 			TEST(-(hi + j));
 		}
@@ -82,20 +106,15 @@ main(int argc, char **argv)
 	hi = 1;
 	for (size_t i = 0; i <= 64; i++, hi *= 2) {
 		printf("Testing around power of 2: %"PRIu64"\n", hi);
-		for (long j = -1024 * 1024; j <= 1024 * 1024; j++) {
+		for (long j = -range; j <= range; j++) {
 			TEST(hi + j);
 			TEST(-(hi + j));
 		}
 	}
 
-	{
+	/* No exhaustive test by default. */
+	if (argc > 1) {
 		size_t limit = UINT32_MAX;
-
-
-		if (argc <= 1) {
-			/* If no argument, default to a smaller range. */
-			limit = 100 * 1000 * 1000;
-		}
 
 		for (size_t i = 0; i <= limit; i++) {
 			if (i % (8 * 1024 * 1024) == 0) {

@@ -1,5 +1,19 @@
 #ifndef AN_ITOA_H
 #define AN_ITOA_H
+/**
+ * Fast unsigned integer to decimal string conversion code.  The code
+ * ONLY WORKS ON LITTLE ENDIAN machines, and will be slow on hardware
+ * with bad support for unaligned stores.
+ *
+ * Unlike regular itoa, the result is *not* NUL-terminated, and the
+ * routines are allowed to write garbage bytes in the destination
+ * buffer after the decimal string, as long as they stay in bounds:
+ * `an_itoa` never writes past `out[9]`, and `an_ltoa` past `out[19]`.
+ *
+ * Porting this to big endian should only necessitate a byteswap
+ * before writing to memory, but we've never needed to support BE.
+ */
+
 #include "an_cc.h"
 
 AN_EXTERN_C_BEGIN

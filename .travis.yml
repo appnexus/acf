@@ -5,6 +5,11 @@ dist: trusty
 sudo: required
 group: edge
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "Zn1EgSdB3nsVXp/c6OTWrD7o/Sofc/jhbBHOePWrG94qhzuU06kQlaONDdOFm//WXWuhvbLxCXZvBPTnVoYk72F1DUQREnaZ5+Wvoi/Xju1of49ynbX28EZrK8RjYHy1yD8DXJAYEsgD+bDoSWGYFJ8bUqgJq1QFBUKkGBum7OOikidQ4R2VBAGZUSL/1q7McgiOOrhdqS7HoOs5xUzd+Y2Kcr02SIdaw3ty6m82+5HCcrIZbSlGYAWC7DD/VKn6xlIF4Ap/STPMoO2xTNrNLzG4b4LgRvolvHvXFRJz3r49D7oaU9AufCpXNLzuC7IpjvGO1ORBSHZni4VfHuPCt1tJvjAmEc7iWYcumnI/wIAGaSLX+/e+bWkfi5j2zX97kKYO8ly5imwrcO4oLuThe1fVhseyvQiufDLltTyjAlYosR0InksWYuBv/YKREKGyjG9kGwl5qUPj07w2X3E9Eur6OCmjjQiX3cYXWP2ffZx+0SQHSw15JPs4RuaiIKdNiKh0kBMG+nrSUuYAgBqxYcUDVfuQJz3AZXRIO1/uVtBYfpROS0TgnN8NewbEhasICMsAgZDwyWbUDcGxjTA/U4rAIv36hhWTXisCtnzsttuU3N2zdutdc/xNlZvAaa6N1bUz8IF+jhMSF4NZAXvt0mdoWholqrl/+MnmGQyZyEs="
 
 script:
   - mkdir build
@@ -16,6 +21,7 @@ script:
 matrix:
   include:
 
+  # Coveralls
   - os: linux
     compiler: gcc
     addons:
@@ -29,6 +35,26 @@ matrix:
     env:
       - COMPILER=g++-4.9
       - CMAKE_OPTIONS=-DENABLE_COVERAGE=ON
+
+  # Coverity
+  - os: linux
+    compiler: gcc
+    before_install: echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['check', 'g++-4.9']
+      coverity_scan:
+        project:
+          name: "appnexus/acf"
+          description: "Build submitted via Travis CI"
+        notification_email: asweeney86@gmail.com
+        build_command_prepend: "mkdir coverity_build ; cd coverity_build ; cmake .. ; cd .."
+        build_command: "make -C coverity_build"
+        branch_pattern: coverity_scan
+    env:
+      - COMPILER=g++-4.9
+      - TESTING=coverity
 
   # Linux / GCC
   - os: linux

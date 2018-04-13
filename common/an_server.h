@@ -4,8 +4,8 @@
 #include <netinet/in.h>
 #include <stdint.h>
 
-#include "common/net/protocol/http-parser/http_parser.h"
 #include "common/an_array.h"
+#include "third_party/http-parser/http_parser.h"
 
 #define AN_IO_CONNECTIONS_MAX	(1U << 28)
 #define AN_IO_THREADS_MAX	(1U << 8)

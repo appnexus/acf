@@ -22,7 +22,6 @@
 #include <ck_ring.h>
 
 #include "common/memory/pool.h"
-#include "common/net/protocol/http-parser/http_parser.h"
 #include "common/rtbr/rtbr.h"
 #include "common/an_array.h"
 #include "common/an_buf_http.h"
@@ -35,6 +34,7 @@
 #include "common/an_syslog.h"
 #include "common/server_config.h"
 #include "common/util.h"
+#include "third_party/http-parser/http_parser.h"
 
 #define INITIAL_BUFFER_SIZE	4096ULL
 #define INITIAL_NUM_EVENTS	64ULL
